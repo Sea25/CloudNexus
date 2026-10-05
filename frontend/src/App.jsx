@@ -1,23 +1,32 @@
 import { useEffect, useState } from 'react'
 
 function App() {
-  const [message, setMessage] = useState('Connecting to backend...')
+  const [services, setServices] = useState([])
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/')
+    fetch('http://127.0.0.1:8000/api/services/')
       .then((response) => response.json())
       .then((data) => {
-        setMessage(data.message)
+        setServices(data)
       })
       .catch(() => {
-        setMessage('Could not connect to backend.')
+        setServices([])
       })
   }, [])
 
   return (
     <div>
       <h1>CloudNexus</h1>
-      <p>{message}</p>
+
+      <h2>Services</h2>
+
+      {services.map((service) => (
+        <div key={service.id}>
+          <p>
+            <strong>{service.name}</strong> — {service.status}
+          </p>
+        </div>
+      ))}
     </div>
   )
 }
